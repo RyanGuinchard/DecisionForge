@@ -4,7 +4,6 @@ logs
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-<<<<<<< HEAD
 lerna-debug.log*
 .pnpm-debug.log*
 
@@ -75,6 +74,7 @@ web_modules/
 
 # dotenv environment variable files
 .env
+server/.env
 .env.development.local
 .env.test.local
 .env.production.local
@@ -129,23 +129,3 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
-=======
-pnpm-debug.log*
-lerna-debug.log*
-
-node_modules
-dist
-dist-ssr
-*.local
-
-# Editor directories and files
-.vscode/*
-!.vscode/extensions.json
-.idea
-.DS_Store
-*.suo
-*.ntvs*
-*.njsproj
-*.sln
-*.sw?
->>>>>>> cc140b1 (initial commit)

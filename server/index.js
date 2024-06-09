@@ -2,7 +2,7 @@
 require("dotenv").config();
 
 const express = require("express");
-const { MongoClient } = require("mongodb");
+const mongodbUtil = require("./services/mongodbUtil");
 
 const app = express();
 
@@ -10,11 +10,21 @@ const app = express();
 app.use(express.json());
 
 // TODO: Add route files
+const gamesRoute = require("./routes/gamesRoute");
 
 // TODO: Mount route files
+app.use("/games", gamesRoute);
 
 // Start server
 const port = process.env.PORT || 3000;
-app.listen(port, () => {
-  console.log(`Server listening at http://localhost:${port}`);
-});
+
+mongodbUtil.connect()
+    .then(() => {
+        app.listen(port, () => {
+            console.log(`Server is listening on port ${port}`);
+        });
+    })
+    .catch((e) => {
+        console.error('Failed to connect to mongodb', e);
+        process.exit(1);
+    });

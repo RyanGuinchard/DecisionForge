@@ -1,6 +1,6 @@
 const { MongoClient } = require("mongodb");
 
-const uri = process.env.MONGODB_URI;
+const uri = process.env.MONGO_URI;
 const DB_NAME = "DecisionForge";
 let client;
 
@@ -32,13 +32,13 @@ const close = async () => {
 };
 
 // Find all documents
-const findAll = async (collectionName, query = {}) => {
+const findAll = async (collectionName, query = {}, projection = {}) => {
   if (!client) {
     throw new Error("You have to connect to the database first");
   }
   const db = client.db(DB_NAME);
   const collection = db.collection(collectionName);
-  return await collection.find(query).toArray();
+  return await collection.find(query, { projection }).toArray();
 };
 
 // Find specific document
@@ -49,7 +49,7 @@ let findOne = async (collectionName, query = {}) => {
   const db = client.db(DB_NAME);
   const collection = db.collection(collectionName);
   return await collection.findOne(query);
-}
+};
 
 module.exports = {
   connect,

@@ -2,7 +2,7 @@
 require("dotenv").config();
 const express = require("express");
 const PORT = process.env.PORT
-const mongodbUtil = require("../services/mongodbUtil.cjs");
+const mongodbUtil = require("./services/mongodbUtil.js");
 
 const app = express();
 
@@ -10,7 +10,7 @@ const app = express();
 app.use(express.json());
 
 // Routes
-const gamesRoute = require("../routes/gamesRoute.cjs");
+const gamesRoute = require("./routes/gamesRoute.js");
 app.use("/games", gamesRoute);
 
 const startServer = async () => {

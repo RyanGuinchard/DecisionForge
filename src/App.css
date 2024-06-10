@@ -1,0 +1,14 @@
+html, body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Roboto', sans-serif;
+    background-color: #f0f0f0;
+}
+
+.navbar-open {
+    transform: translateX(0);
+  }
+  
+  .navbar-closed {
+    transform: translateX(-100%);
+  }

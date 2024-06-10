@@ -1,3 +1,4 @@
+/* eslint-env node */
 const { MongoClient } = require("mongodb");
 
 const uri = process.env.MONGO_URI;

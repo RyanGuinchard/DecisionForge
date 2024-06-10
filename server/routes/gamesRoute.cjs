@@ -1,6 +1,7 @@
+/* eslint-env node */
 const express = require("express");
 const router = express.Router();
-const mongodbUtil = require("../services/mongodbUtil");
+const mongodbUtil = require("../services/mongodbUtil.cjs");
 
 // Route to get all games by title
 router.get("/", async (req, res) => {

@@ -1,10 +1,14 @@
 /* eslint-env node */
 require("dotenv").config();
 const express = require("express");
+const cors = require("cors");
 const PORT = process.env.PORT
 const mongodbUtil = require("./services/mongodbUtil.js");
 
 const app = express();
+
+app.use(cors());
+
 
 // Middleware to parse JSON
 app.use(express.json());

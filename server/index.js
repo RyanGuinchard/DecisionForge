@@ -13,6 +13,11 @@ app.use(express.json());
 const gamesRoute = require("./routes/gamesRoute.js");
 app.use("/games", gamesRoute);
 
+// Warmup route to prevent cold starts
+app.get("/warmup", (req, res) => {
+  res.status(200).send("Warm-up successful");
+});
+
 const startServer = async () => {
     try {
         await mongodbUtil.connect();

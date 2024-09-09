@@ -6,6 +6,7 @@ import CategoryPanel from "../../components/CategoryPanel";
 const Game = () => {
   const { title } = useParams();
   const [game, setGame] = useState(null);
+  const [reRollAll, setRerollAll] = useState(false);
 
   const apiUrl = import.meta.env.VITE_API_URL;
 
@@ -20,16 +21,30 @@ const Game = () => {
     return <div>Loading...</div>;
   }
 
+  const handleRerollAll = () => {
+    setRerollAll((prevState) => !prevState);
+  };
+
   return (
     <div className="relative flex flex-col items-center min-h-screen bg-gray-900 text-white p-4">
       <BackButton />
-      <div className="relative w-full flex items-center justify-center mb-8">
-        <h1 className="text-4xl font-bold">{game.title}</h1>
+      <div className="relative w-full flex flex-col items-center justify-center mb-8">
+        {/* Title */}
+        <h1 className="text-4xl font-bold mb-4 text-center">{game.title}</h1>
+        
+        {/* Centered Reroll All button */}
+        <button
+          className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition duration-200"
+          onClick={handleRerollAll}
+        >
+          Reroll All
+        </button>
       </div>
 
+      {/* Category panels */}
       <div className="flex flex-wrap justify-center gap-4">
         {game.choices.map((category, index) => (
-          <CategoryPanel key={index} category={category} />
+          <CategoryPanel key={index} category={category} triggerReroll={reRollAll} />
         ))}
       </div>
     </div>

@@ -32,11 +32,16 @@ const close = async () => {
   await client.close();
 };
 
+// Helper function to ensure connection is open
+const ensureConnection = async () => {
+  if (!client) {
+    await connect();
+  }
+}
+
 // Find all documents
 const findAll = async (collectionName, query = {}, projection = {}) => {
-  if (!client) {
-    throw new Error("You have to connect to the database first");
-  }
+  await ensureConnection();
   const db = client.db(DB_NAME);
   const collection = db.collection(collectionName);
   return await collection.find(query, { projection }).toArray();
@@ -44,9 +49,7 @@ const findAll = async (collectionName, query = {}, projection = {}) => {
 
 // Find specific document
 let findOne = async (collectionName, query = {}) => {
-  if (!client) {
-    throw new Error("You have to connect to the database first");
-  }
+  await ensureConnection();
   const db = client.db(DB_NAME);
   const collection = db.collection(collectionName);
   return await collection.findOne(query);

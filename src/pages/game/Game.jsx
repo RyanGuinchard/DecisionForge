@@ -17,8 +17,19 @@ const Game = () => {
       .catch((err) => console.error("Error fetching specific game: " + err));
   }, [apiUrl, title]);
 
+  useEffect(() => {
+    document.title = game ? `${game.title} Randomizer` : "Loading...";
+  });
+
   if (!game) {
-    return <div>Loading...</div>;
+    return (
+      <div className="flex justify-center items-center min-h-screen bg-gray-900 text-white">
+        <div className="text-center">
+          <div className="spinner border-t-4 border-blue-500 rounded-full w-16 h-16 mb-4 animate-spin"></div>
+          <p className="text-xl font-semibold">Loading...</p>
+        </div>
+      </div>
+    );
   }
 
   const handleRerollAll = () => {

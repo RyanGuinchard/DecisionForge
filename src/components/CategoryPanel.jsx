@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
 
 const CategoryPanel = ({ category, triggerReroll }) => {
   const [currentOption, setCurrentOption] = useState(category.options[0]);
@@ -7,35 +7,16 @@ const CategoryPanel = ({ category, triggerReroll }) => {
   const [animationFinished, setAnimationFinished] = useState(false);
   const [isLocked, setIsLocked] = useState(false);
 
-  useEffect(() => {
-    const startScrolling = () => {
-      setIsAnimating(true);
-      setAnimationFinished(false);
-      const animationDuration = 2000; // Animation duration in milliseconds
-      const intervalDuration = 100; // Interval duration in milliseconds
+  // Ref to track whether the initial reroll has been triggered
+  const initialRerollTriggered = useRef(false);
 
-      const interval = setInterval(() => {
-        const randomIndex = Math.floor(Math.random() * category.options.length);
-        setCurrentOption(category.options[randomIndex]);
-      }, intervalDuration);
-
-      setTimeout(() => {
-        clearInterval(interval);
-        const finalIndex = Math.floor(Math.random() * category.options.length);
-        setCurrentOption(category.options[finalIndex]);
-        setIsAnimating(false);
-        setAnimationFinished(true);
-      }, animationDuration);
-    };
-
-    startScrolling();
-  }, [category.options]);
-
+  // Function to handle the rerolling process
   const reroll = useCallback(() => {
     if (isLocked) return;
 
     setIsAnimating(true);
     setAnimationFinished(false);
+
     const animationDuration = 2000; // Animation duration in milliseconds
     const intervalDuration = 100; // Interval duration in milliseconds
 
@@ -53,6 +34,17 @@ const CategoryPanel = ({ category, triggerReroll }) => {
     }, animationDuration);
   }, [category.options, isLocked]);
 
+  // Initial reroll when the component is mounted
+  useEffect(() => {
+    if (!initialRerollTriggered.current) {
+      initialRerollTriggered.current = true;
+      setTimeout(() => {
+        reroll(); // Delay the initial reroll for smoother UX
+      }, 500); // Delay of 500ms to prevent immediate reroll
+    }
+  }, [reroll]);
+
+  // Handle reroll when triggered by parent component
   useEffect(() => {
     if (triggerReroll && !isLocked) {
       reroll();
@@ -80,6 +72,7 @@ const CategoryPanel = ({ category, triggerReroll }) => {
       <button
         onClick={reroll}
         className="px-2 py-1 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition duration-200 text-sm mr-2"
+        disabled={isLocked} // Disable the reroll button if locked
       >
         Reroll
       </button>

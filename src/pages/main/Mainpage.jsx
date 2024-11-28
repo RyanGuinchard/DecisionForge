@@ -6,7 +6,6 @@ const Mainpage = () => {
   const [games, setGames] = useState([]); // Initialize as an empty array
   const [searchTerm, setSearchTerm] = useState('');
   const [error, setError] = useState(null);
-  // const navigate = useNavigate();
 
   const apiUrl = import.meta.env.VITE_API_URL;
 
@@ -61,7 +60,7 @@ const Mainpage = () => {
           onClick={() => navigate('/admin/login')}
           className="mt-4 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition duration-200"
         >
-          Admin Login
+          Login
         </button> */}
       </div>
     </>

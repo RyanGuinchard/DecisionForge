@@ -1,4 +1,6 @@
 import { useEffect, useState } from "react";
+import AdminModal from "../../components/AdminModal";
+
 const Admin = () => {
   const [games, setGames] = useState([]);
   const [categories, setCategories] = useState([]);
@@ -85,6 +87,45 @@ const Admin = () => {
     setSelectedOption(optionTitle);
   };
 
+  // Logic for deleting a game, category, or option
+  const handleDelete = (event) => {
+    event.preventDefault();
+    let deleteUrl = `${apiUrl}/games/${selectedGame.title}`;
+    if (selectedCategory) {
+      deleteUrl += `/category/${selectedCategory}`;
+    }
+    if (selectedOption) {
+      deleteUrl += `/option/${selectedOption}`;
+    }
+
+    fetch(deleteUrl, { method: "DELETE" })
+      .then((response) => {
+        if (!response.ok) {
+          return response.json().then((error) => {
+            throw new Error(error.message || "Network response was not ok");
+          });
+        }
+        // Check if the response body is empty
+        if (response.status === 204 || response.headers.get("content-length") === "0") {
+          return {};
+        }
+        return response.json();
+      })
+      .then((data) => {
+        console.log("Delete response: ", data);
+        setCategories([]);
+        setOptions([]);
+        setSelectedGame(null);
+        setSelectedCategory(null);
+        setSelectedOption(null);
+        fetchGameData(selectedGame.title);
+      })
+      .catch((err) => {
+        console.error("Error deleting game data:", err);
+        setError("Error deleting game data. Please try again later: ", err.message);
+      });
+  };
+
   return (
     <div className="flex flex-col items-center min-h-screen bg-gray-900 text-white p-4">
       <h1 className="text-4xl font-bold mb-4 text-center">Admin</h1>
@@ -92,7 +133,7 @@ const Admin = () => {
 
       {/* Full game list drop */}
       <div className="flex items-center">
-        <select
+        <select id="game-select"
           onChange={handleGameChange}
           className="p-2 flex-grow text-gray-900 rounded-lg"
         >
@@ -103,7 +144,10 @@ const Admin = () => {
             </option>
           ))}
         </select>
-        <button className="ml-2 p-2 bg-red-500 text-white rounded-lg">
+        <button
+          onClick={handleDelete}
+          className="ml-2 p-2 bg-red-500 text-white rounded-lg"
+        >
           Delete
         </button>
       </div>
@@ -111,7 +155,7 @@ const Admin = () => {
       {/* Category list */}
       {selectedGame && (
         <div className="flex items-center">
-          <select
+          <select id="category-select"
             onChange={handleCategoryChange}
             className="p-2 flex-grow text-gray-900 rounded-lg"
           >
@@ -122,7 +166,10 @@ const Admin = () => {
               </option>
             ))}
           </select>
-          <button className="ml-2 p-2 bg-red-500 text-white rounded-lg">
+          <button
+            onClick={handleDelete}
+            className="ml-2 p-2 bg-red-500 text-white rounded-lg"
+          >
             Delete
           </button>
         </div>
@@ -131,7 +178,7 @@ const Admin = () => {
       {/* Options list */}
       {selectedCategory && (
         <div className="flex items-center">
-          <select
+          <select id="option-select"
             onChange={handleOptionChange}
             className="p-2 flex-grow text-gray-900 rounded-lg"
           >
@@ -142,7 +189,10 @@ const Admin = () => {
               </option>
             ))}
           </select>
-          <button className="ml-2 p-2 bg-red-500 text-white rounded-lg">
+          <button
+            onClick={handleDelete}
+            className="ml-2 p-2 bg-red-500 text-white rounded-lg"
+          >
             Delete
           </button>
         </div>
